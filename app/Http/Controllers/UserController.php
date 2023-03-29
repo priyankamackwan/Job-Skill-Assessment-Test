@@ -21,13 +21,21 @@ class UserController extends Controller
     public function store(Request $request) {  // Store user data
 
       // Form validation
-      $this->validate($request, [
+      $rules = [
         'salutation'    => 'required_unless:user_type,!=,student',
         'first_name'    => 'required',
         'last_name'     => 'required',
         'email'         => 'required|email',
         'profile_photo' => 'nullable|mimes:jpeg,jpg'
-     ]);
+      ];
+      
+      $messages = [
+        'required'  => 'The :attribute field is required.',
+        'unique'    => ':attribute is already used',
+        'required_unless' => 'The :attribute field is required.'
+      ];
+      
+      $request->validate($rules,$messages);
 
      return back()->with('success', 'Your form has been submitted.');
 
